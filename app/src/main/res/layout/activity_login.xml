@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/background"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="40dp">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:src="@mipmap/icon" />
+
+    <EditText
+        android:id="@+id/edit_login_user_id"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/user"
+        android:inputType="text"
+        android:singleLine="true"
+        android:textColorHint="#ffffff"
+        android:textSize="30sp" />
+
+    <EditText
+        android:id="@+id/edit_login_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:hint="@string/password"
+        android:inputType="textPassword"
+        android:singleLine="true"
+        android:textColorHint="#ffffff"
+        android:textSize="30sp" />
+
+    <Button
+        android:id="@+id/btn_login_login"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/bg_btn"
+        android:text="@string/login"
+        android:textColor="#ffffff"
+        android:textSize="30sp" />
+
+    <Button
+        android:id="@+id/btn_login_register"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/bg_btn"
+        android:text="@string/register"
+        android:textColor="#ffffff"
+        android:textSize="30sp" />
+</LinearLayout>
+
+
+

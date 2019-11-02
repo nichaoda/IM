@@ -2,12 +2,13 @@ package com.example.im.util;
 
 import java.sql.*;
 
+import static com.example.im.util.ConstValues.DATABASE_NAME;
+import static com.example.im.util.ConstValues.DATABASE_PASSWORD;
+import static com.example.im.util.ConstValues.DATABASE_URL;
+import static com.example.im.util.ConstValues.DATABASE_USER;
+import static com.example.im.util.ConstValues.DRIVER_NAME;
+
 public class MySqlDBHelper {
-    private static final String DRIVER_NAME = "com.mysql.jdbc.Driver";
-    private static final String DATABASE_URL = "jdbc:mysql://192.168.0.6:3306/";
-    private static final String DATABASE_NAME = "instant_messaging";
-    private static final String USER = "root";
-    private static final String PASSWORD = "root";
     private Connection conn;
     /**
      * 预编译的Sql语句对象
@@ -28,7 +29,7 @@ public class MySqlDBHelper {
             // 连接数据库
             conn = DriverManager.getConnection(DATABASE_URL + DATABASE_NAME
                             + "?useUnicode=true&characterEncoding=utf8",
-                    USER, PASSWORD);
+                    DATABASE_USER, DATABASE_PASSWORD);
             // 获取sql语句管理对象
             getPreparedStatement(sql);
         } catch (Exception e) {

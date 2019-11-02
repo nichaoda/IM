@@ -24,13 +24,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.example.im.util.ConstValues.HAS_REGISTERED;
+import static com.example.im.util.ConstValues.REGISTER_FAILED;
+import static com.example.im.util.ConstValues.REGISTER_SUCCEED;
+
 public class RegisterActivity extends AppCompatActivity {
-    private static final int HAS_REGISTERED = 0;
-    private static final int REGISTER_FAILED = 1;
-    private static final int REGISTER_SUCCEED = 2;
     private EditText mEditTextName, mEditTextUserId, mEditTextPassword, mEditTextCheckPassword;
     private Button mBtnRegister;
 

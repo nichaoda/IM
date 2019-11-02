@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -15,23 +14,14 @@ import android.widget.Toast;
 
 import com.example.im.R;
 import com.example.im.info.User;
+import com.example.im.util.ConnectRongIM;
 import com.example.im.util.MySqlDBHelper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import io.rong.imkit.RongIM;
-import io.rong.imlib.RongIMClient;
-
-import static com.example.im.util.ConstValues.HAS_LOGINED;
 import static com.example.im.util.ConstValues.HAS_NOT_REGISTERED;
-import static com.example.im.util.ConstValues.LOGIN_INFO;
-import static com.example.im.util.ConstValues.NAME;
-import static com.example.im.util.ConstValues.PASSWORD;
 import static com.example.im.util.ConstValues.PASSWORD_IS_WRONG;
-import static com.example.im.util.ConstValues.PORTRAIT_URI;
-import static com.example.im.util.ConstValues.TOKEN;
-import static com.example.im.util.ConstValues.USER_ID;
 
 public class LoginActivity extends AppCompatActivity {
     private EditText mEditTextUserId, mEditTextPassword;
@@ -86,38 +76,7 @@ public class LoginActivity extends AppCompatActivity {
                                 User user = User.getInstance();
                                 user.setInfo(userId, password, name, portraitUri, token);
                                 // 登录
-                                RongIM.connect(token, new RongIMClient.ConnectCallback() {
-                                    @Override
-                                    public void onTokenIncorrect() {
-                                        Toast.makeText(LoginActivity.this, "登录失败", Toast.LENGTH_SHORT).show();
-                                    }
-
-                                    @Override
-                                    public void onSuccess(String s) {
-                                        Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
-                                        // 登录成功,将信息保存到本地SharedPreferences中,下次
-                                        // 可以在启动页中根据对应的值判断是否需要再次登录
-                                        SharedPreferences preferences = getSharedPreferences(LOGIN_INFO, MODE_PRIVATE);
-                                        SharedPreferences.Editor editor = preferences.edit();
-                                        editor.putBoolean(HAS_LOGINED, true);
-                                        editor.putString(USER_ID, user.getUserId());
-                                        editor.putString(PASSWORD, user.getPassword());
-                                        editor.putString(NAME, user.getName());
-                                        editor.putString(PORTRAIT_URI, user.getPortraitUri());
-                                        editor.putString(TOKEN, user.getToken());
-                                        editor.apply();
-
-                                        // 进入主界面
-                                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                        startActivity(intent);
-                                        finish();
-                                    }
-
-                                    @Override
-                                    public void onError(RongIMClient.ErrorCode errorCode) {
-                                        Toast.makeText(LoginActivity.this, "登录失败", Toast.LENGTH_SHORT).show();
-                                    }
-                                });
+                                ConnectRongIM.connectRongIM(LoginActivity.this, user);
                             } else {
                                 // 密码错误
                                 Message message = Message.obtain();
@@ -153,6 +112,8 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mHandler.removeCallbacksAndMessages(null);
+        if (mHandler != null) {
+            mHandler.removeCallbacksAndMessages(null);
+        }
     }
 }

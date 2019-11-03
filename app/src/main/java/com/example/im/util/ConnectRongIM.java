@@ -9,8 +9,12 @@ import android.widget.Toast;
 import com.example.im.activity.MainActivity;
 import com.example.im.info.User;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import io.rong.imkit.RongIM;
 import io.rong.imlib.RongIMClient;
+import io.rong.imlib.model.Conversation;
 
 import static android.content.Context.MODE_PRIVATE;
 import static com.example.im.util.ConstValues.HAS_LOGINED;
@@ -44,8 +48,13 @@ public class ConnectRongIM {
                 editor.apply();
 
                 // 进入主界面
-                Intent intent = new Intent(context, MainActivity.class);
-                context.startActivity(intent);
+//                Intent intent = new Intent(context, MainActivity.class);
+//                context.startActivity(intent);
+                Map<String, Boolean> supportedConversation = new HashMap<>();
+                supportedConversation.put(Conversation.ConversationType.PRIVATE.getName(), false);
+                supportedConversation.put(Conversation.ConversationType.GROUP.getName(), false);
+                supportedConversation.put(Conversation.ConversationType.SYSTEM.getName(), true);
+                RongIM.getInstance().startConversationList(context, supportedConversation);
                 if (context instanceof Activity) {
                     ((Activity) context).finish();
                 }

@@ -40,4 +40,9 @@ public class ConstValues {
     public static final String DATABASE_NAME = "instant_messaging";
     public static final String DATABASE_USER = "root";
     public static final String DATABASE_PASSWORD = "root";
+    /**
+     * 主界面
+     */
+    public static final String CONVERSATION_LIST_FRAGMENT_TAG = "messages";
+    public static final String CONTACTS_FRAGMENT_TAG = "contacts";
 }

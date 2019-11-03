@@ -6,4 +6,6 @@
     <string name="register">注册</string>
     <string name="name">用户名称</string>
     <string name="check_password">确认密码</string>
+    <string name="messages">消息</string>
+    <string name="contacts">联系人</string>
 </resources>

@@ -93,7 +93,7 @@
     <!--
     size:28px color:#999999
     1、RichContentMessage content 字体
-    2、会话列表 item message 字体
+    2、会话列表 item messages 字体
     3、异常弹出条 字体
     -->
     <style name="RCTheme.Message.RichContent.TextView" parent="RCTheme.TextView">

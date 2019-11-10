@@ -26,9 +26,9 @@ import java.util.Map;
 import retrofit2.Call;
 import retrofit2.Response;
 
-import static com.example.im.util.ConstValues.HAS_REGISTERED;
-import static com.example.im.util.ConstValues.REGISTER_FAILED;
-import static com.example.im.util.ConstValues.REGISTER_SUCCEED;
+import static com.example.im.info.ConstValues.HAS_REGISTERED;
+import static com.example.im.info.ConstValues.REGISTER_FAILED;
+import static com.example.im.info.ConstValues.REGISTER_SUCCEED;
 
 public class RegisterActivity extends AppCompatActivity {
     private EditText mEditTextName, mEditTextUserId, mEditTextPassword, mEditTextCheckPassword;
@@ -103,7 +103,6 @@ public class RegisterActivity extends AppCompatActivity {
                                 .getUserToken(HttpUtil.getHeaders(), bodies);
                         try {
                             Response<UserTokenBean> response = call.execute();
-
                             UserTokenBean userTokenBean = response.body();
                             if (userTokenBean.getCode() == 200) {
                                 // 注册成功,插入到数据库中

@@ -2,11 +2,11 @@ package com.example.im.util;
 
 import java.sql.*;
 
-import static com.example.im.util.ConstValues.DATABASE_NAME;
-import static com.example.im.util.ConstValues.DATABASE_PASSWORD;
-import static com.example.im.util.ConstValues.DATABASE_URL;
-import static com.example.im.util.ConstValues.DATABASE_USER;
-import static com.example.im.util.ConstValues.DRIVER_NAME;
+import static com.example.im.info.ConstValues.DATABASE_NAME;
+import static com.example.im.info.ConstValues.DATABASE_PASSWORD;
+import static com.example.im.info.ConstValues.DATABASE_URL;
+import static com.example.im.info.ConstValues.DATABASE_USER;
+import static com.example.im.info.ConstValues.DRIVER_NAME;
 
 public class MySqlDBHelper {
     private Connection conn;

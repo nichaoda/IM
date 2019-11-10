@@ -9,24 +9,25 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import com.example.im.R;
-import com.example.im.fragment.ContactsFragment;
+import com.example.im.fragment.FriendFragment;
+import com.example.im.fragment.GroupFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-
 
 import java.util.List;
 
 import io.rong.imkit.fragment.ConversationListFragment;
-import io.rong.imlib.model.Conversation;
 
-import static com.example.im.util.ConstValues.CONTACTS_FRAGMENT_TAG;
-import static com.example.im.util.ConstValues.CONVERSATION_LIST_FRAGMENT_TAG;
+import static com.example.im.info.ConstValues.CONTACTS_FRAGMENT_TAG;
+import static com.example.im.info.ConstValues.CONVERSATION_LIST_FRAGMENT_TAG;
+import static com.example.im.info.ConstValues.GROUP_FRAGMENT_TAG;
 
 public class MainActivity extends AppCompatActivity {
     private BottomNavigationView mBottomNavigationView;
     private FragmentManager mFragmentManager = getSupportFragmentManager();
     private ConversationListFragment mConversationListFragment;
 
-    private Fragment mContactsFragment = new ContactsFragment();
+    private Fragment mFriendFragment = new FriendFragment();
+    private Fragment mGroupFragment = new GroupFragment();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +45,10 @@ public class MainActivity extends AppCompatActivity {
                     changeToFragment(mConversationListFragment, CONVERSATION_LIST_FRAGMENT_TAG);
                     return true;
                 case R.id.contacts:
-                    changeToFragment(mContactsFragment, CONTACTS_FRAGMENT_TAG);
+                    changeToFragment(mFriendFragment, CONTACTS_FRAGMENT_TAG);
+                    return true;
+                case R.id.groups:
+                    changeToFragment(mGroupFragment, GROUP_FRAGMENT_TAG);
                     return true;
                 default:
             }

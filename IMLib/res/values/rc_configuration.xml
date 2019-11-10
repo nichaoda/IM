@@ -21,7 +21,7 @@
     <!--&lt;!&ndash;实时位置共享会话类型&ndash;&gt;-->
     <!--<string-array name="rc_realtime_support_conversation_types" translatable="false">-->
         <!--<item>private</item>-->
-        <!--<item>group</item>-->
+        <!--<item>groups</item>-->
     <!--</string-array>-->
 
     <!--自定义配置重连间隔-->

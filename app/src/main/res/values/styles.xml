@@ -6,11 +6,17 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="actionOverflowMenuStyle">@style/AppOverflowMenuStyle</item>
     </style>
 
     <!--  启动页  -->
     <style name="SplashTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowBackground">@drawable/splash</item>
         <item name="windowNoTitle">true</item>
+    </style>
+
+    <!--    为了菜单不遮住标题栏-->
+    <style name="AppOverflowMenuStyle" parent="Base.Widget.AppCompat.Light.PopupMenu.Overflow">
+        <item name="overlapAnchor">false</item>
     </style>
 </resources>

@@ -2,11 +2,10 @@ package com.example.im.util;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.widget.Toast;
 
-import com.example.im.activity.MainActivity;
+import com.example.im.info.Contacts;
 import com.example.im.info.User;
 
 import java.util.HashMap;
@@ -17,13 +16,13 @@ import io.rong.imlib.RongIMClient;
 import io.rong.imlib.model.Conversation;
 
 import static android.content.Context.MODE_PRIVATE;
-import static com.example.im.util.ConstValues.HAS_LOGINED;
-import static com.example.im.util.ConstValues.LOGIN_INFO;
-import static com.example.im.util.ConstValues.NAME;
-import static com.example.im.util.ConstValues.PASSWORD;
-import static com.example.im.util.ConstValues.PORTRAIT_URI;
-import static com.example.im.util.ConstValues.TOKEN;
-import static com.example.im.util.ConstValues.USER_ID;
+import static com.example.im.info.ConstValues.HAS_LOGINED;
+import static com.example.im.info.ConstValues.LOGIN_INFO;
+import static com.example.im.info.ConstValues.NAME;
+import static com.example.im.info.ConstValues.PASSWORD;
+import static com.example.im.info.ConstValues.PORTRAIT_URI;
+import static com.example.im.info.ConstValues.TOKEN;
+import static com.example.im.info.ConstValues.USER_ID;
 
 public class ConnectRongIM {
     public static void connectRongIM(Context context, User user) {
@@ -47,9 +46,11 @@ public class ConnectRongIM {
                 editor.putString(TOKEN, user.getToken());
                 editor.apply();
 
+                // 获取好友列表和群组列表
+                Contacts.getInstance().setFriendList(ContactsOperation.getFriendListFromMySQL());
+                Contacts.getInstance().setGroupList(ContactsOperation.getGroupListFromMySQL());
+
                 // 进入主界面
-//                Intent intent = new Intent(context, MainActivity.class);
-//                context.startActivity(intent);
                 Map<String, Boolean> supportedConversation = new HashMap<>();
                 supportedConversation.put(Conversation.ConversationType.PRIVATE.getName(), false);
                 supportedConversation.put(Conversation.ConversationType.GROUP.getName(), false);

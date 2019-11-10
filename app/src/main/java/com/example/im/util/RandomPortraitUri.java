@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import static com.example.im.util.ConstValues.DEFAULT_HEAD_PORTRAIT1;
-import static com.example.im.util.ConstValues.DEFAULT_HEAD_PORTRAIT2;
-import static com.example.im.util.ConstValues.DEFAULT_HEAD_PORTRAIT3;
-import static com.example.im.util.ConstValues.DEFAULT_HEAD_PORTRAIT4;
-import static com.example.im.util.ConstValues.DEFAULT_HEAD_PORTRAIT5;
-import static com.example.im.util.ConstValues.DEFAULT_HEAD_PORTRAIT6;
-import static com.example.im.util.ConstValues.DEFAULT_HEAD_PORTRAIT7;
+import static com.example.im.info.ConstValues.DEFAULT_HEAD_PORTRAIT1;
+import static com.example.im.info.ConstValues.DEFAULT_HEAD_PORTRAIT2;
+import static com.example.im.info.ConstValues.DEFAULT_HEAD_PORTRAIT3;
+import static com.example.im.info.ConstValues.DEFAULT_HEAD_PORTRAIT4;
+import static com.example.im.info.ConstValues.DEFAULT_HEAD_PORTRAIT5;
+import static com.example.im.info.ConstValues.DEFAULT_HEAD_PORTRAIT6;
+import static com.example.im.info.ConstValues.DEFAULT_HEAD_PORTRAIT7;
 
 public class RandomPortraitUri {
     public static String getRandomPortraitUri() {

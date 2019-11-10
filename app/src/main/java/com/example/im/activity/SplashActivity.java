@@ -9,13 +9,13 @@ import android.os.Bundle;
 import com.example.im.info.User;
 import com.example.im.util.ConnectRongIM;
 
-import static com.example.im.util.ConstValues.HAS_LOGINED;
-import static com.example.im.util.ConstValues.LOGIN_INFO;
-import static com.example.im.util.ConstValues.NAME;
-import static com.example.im.util.ConstValues.PASSWORD;
-import static com.example.im.util.ConstValues.PORTRAIT_URI;
-import static com.example.im.util.ConstValues.TOKEN;
-import static com.example.im.util.ConstValues.USER_ID;
+import static com.example.im.info.ConstValues.HAS_LOGINED;
+import static com.example.im.info.ConstValues.LOGIN_INFO;
+import static com.example.im.info.ConstValues.NAME;
+import static com.example.im.info.ConstValues.PASSWORD;
+import static com.example.im.info.ConstValues.PORTRAIT_URI;
+import static com.example.im.info.ConstValues.TOKEN;
+import static com.example.im.info.ConstValues.USER_ID;
 
 public class SplashActivity extends AppCompatActivity {
 

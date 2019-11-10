@@ -20,8 +20,8 @@ import com.example.im.util.MySqlDBHelper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import static com.example.im.util.ConstValues.HAS_NOT_REGISTERED;
-import static com.example.im.util.ConstValues.PASSWORD_IS_WRONG;
+import static com.example.im.info.ConstValues.HAS_NOT_REGISTERED;
+import static com.example.im.info.ConstValues.PASSWORD_IS_WRONG;
 
 public class LoginActivity extends AppCompatActivity {
     private EditText mEditTextUserId, mEditTextPassword;

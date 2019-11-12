@@ -19,7 +19,7 @@ public class ConversationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_conversation);
         String conversationType = getIntent().getData().getLastPathSegment().toLowerCase(Locale.US);
-        String targetId = getIntent().getData().getQueryParameter("title");
+        String targetId = getIntent().getData().getQueryParameter("targetId");
         FragmentManager fragmentManage = getSupportFragmentManager();
         ConversationFragment fragment = (ConversationFragment) fragmentManage.findFragmentById(R.id.conversation);
         Uri uri = Uri.parse("rong://" + getApplicationInfo().packageName).buildUpon()

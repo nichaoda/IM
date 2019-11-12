@@ -1,6 +1,7 @@
 package com.example.im.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,13 +54,15 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
             // 好友列表
             Friend friend = mFriendList.get(position);
             holder.bind(friend);
-//            RongIM.getInstance().startPrivateChat(mContext, friend.getUserId(), friend.getName());
-            return;
+            holder.itemView.setOnClickListener((v) -> RongIM.getInstance().startPrivateChat(mContext,
+                    friend.getUserId(), friend.getName()));
+        } else if ("group".equals(mFragmentName)) {
+            // 群组列表
+            Group group = mGroupList.get(position);
+            holder.bind(group);
+            holder.itemView.setOnClickListener((v) -> RongIM.getInstance().startGroupChat(mContext,
+                    group.getGroupId(), group.getName()));
         }
-        // 群组列表
-        Group group = mGroupList.get(position);
-        holder.bind(group);
-//            RongIM.getInstance().startGroupChat(mContext, group.getGroupId(), group.getName());
     }
 
     public void addFriend(Friend friend) {

@@ -26,6 +26,7 @@ public class SplashActivity extends AppCompatActivity {
         boolean hasLogined = preferences.getBoolean(HAS_LOGINED, false);
         if (!hasLogined) {
             startActivity(new Intent(this, LoginActivity.class));
+            finish();
         } else {
             String userId = preferences.getString(USER_ID, null);
             String password = preferences.getString(PASSWORD, null);

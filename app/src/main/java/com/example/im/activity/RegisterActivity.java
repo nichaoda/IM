@@ -15,7 +15,7 @@ import com.example.im.R;
 import com.example.im.bean.UserTokenBean;
 import com.example.im.util.HttpUtil;
 import com.example.im.util.MySqlDBHelper;
-import com.example.im.util.RandomPortraitUri;
+import com.example.im.util.PortraitUri;
 
 import java.io.IOException;
 import java.sql.ResultSet;
@@ -97,7 +97,7 @@ public class RegisterActivity extends AppCompatActivity {
                         Map<String, String> bodies = new HashMap<>();
                         bodies.put("userId", userId);
                         bodies.put("name", name);
-                        String portraitUri = RandomPortraitUri.getRandomPortraitUri();
+                        String portraitUri = PortraitUri.getRandomPortraitUri();
                         bodies.put("portraitUri", portraitUri);
                         Call<UserTokenBean> call = HttpUtil.getInterfaceInstance()
                                 .getUserToken(HttpUtil.getHeaders(), bodies);

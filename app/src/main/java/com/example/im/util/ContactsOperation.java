@@ -13,11 +13,9 @@ import androidx.appcompat.app.AlertDialog;
 
 import com.example.im.R;
 import com.example.im.bean.CodeBean;
-import com.example.im.bean.ContactNtfBean;
 import com.example.im.info.Friend;
 import com.example.im.info.Group;
 import com.example.im.info.User;
-import com.google.gson.Gson;
 
 import java.io.IOException;
 import java.sql.ResultSet;
@@ -164,7 +162,6 @@ public class ContactsOperation {
                                                 message.what = GROUP_CREATE_SUCCEED;
                                                 message.obj = new Group(groupId, groupName);
                                                 handler.sendMessage(message);
-                                                // 群聊开启 startGroupChat();
                                                 return;
                                             }
                                             // 插入到group_member表失败,删除chat_group表的对应信息
@@ -269,7 +266,6 @@ public class ContactsOperation {
                                         message.what = GROUP_ADD_SUCCEED;
                                         message.obj = new Group(groupId, groupName);
                                         handler.sendMessage(message);
-                                        // 发起聊天 startGroupChat
                                         return;
                                     }
                                     message.what = GROUP_ADD_FAILED;

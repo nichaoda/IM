@@ -3,7 +3,6 @@ package com.example.im.activity;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
 import android.net.Uri;
 import android.os.Bundle;
@@ -16,16 +15,21 @@ import android.widget.Toast;
 import com.example.im.R;
 import com.example.im.fragment.FriendFragment;
 import com.example.im.fragment.GroupFragment;
+import com.example.im.info.Contacts;
 import com.example.im.info.Friend;
 import com.example.im.info.Group;
+import com.example.im.info.User;
 import com.example.im.util.ContactsOperation;
+import com.example.im.util.PortraitUri;
 import com.example.im.util.SystemMessageOperation;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.List;
 
+import io.rong.imkit.RongIM;
 import io.rong.imkit.fragment.ConversationListFragment;
 import io.rong.imlib.model.Conversation;
+import io.rong.imlib.model.UserInfo;
 
 import static com.example.im.info.ConstValues.ADD_GROUP_INFO_IS_EMPTY;
 import static com.example.im.info.ConstValues.CAN_NOT_ADD_MYSELF;
@@ -77,8 +81,12 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(MainActivity.this, "发送了添加好友的请求", Toast.LENGTH_SHORT).show();
                     break;
                 case FRIEND_ADD_SUCCEED:
+                    Friend friend = (Friend) msg.obj;
                     ((FriendFragment) getSupportFragmentManager().findFragmentByTag(FRIEND_FRAGMENT_TAG))
-                            .getContactsAdapter().addFriend((Friend) msg.obj);
+                            .getContactsAdapter().addFriend(friend);
+                    // 刷新用户信息
+                    RongIM.getInstance().refreshUserInfoCache(new UserInfo(friend.getUserId(), friend.getName(),
+                            Uri.parse(friend.getPortraitUri())));
                     Toast.makeText(MainActivity.this, "好友添加成功", Toast.LENGTH_SHORT).show();
                     break;
                 case CREATE_GROUP_INFO_NOT_COMPLETE:
@@ -90,11 +98,16 @@ public class MainActivity extends AppCompatActivity {
                 case GROUP_CREATE_FAILED:
                     Toast.makeText(MainActivity.this, "创建失败", Toast.LENGTH_SHORT).show();
                     break;
-                case GROUP_CREATE_SUCCEED:
+                case GROUP_CREATE_SUCCEED: {
+                    Group group = (Group) msg.obj;
                     ((GroupFragment) getSupportFragmentManager().findFragmentByTag(GROUP_FRAGMENT_TAG))
-                            .getContactsAdapter().addGroup((Group) msg.obj);
+                            .getContactsAdapter().addGroup(group);
+                    // 刷新群组信息
+                    RongIM.getInstance().refreshGroupInfoCache(new io.rong.imlib.model.Group(group.getGroupId(),
+                            group.getName(), PortraitUri.getUriFromDrawableRes(MainActivity.this, R.drawable.group)));
                     Toast.makeText(MainActivity.this, "创建成功", Toast.LENGTH_SHORT).show();
-                    break;
+                }
+                break;
                 case ADD_GROUP_INFO_IS_EMPTY:
                     Toast.makeText(MainActivity.this, "群组id为空,无法搜索", Toast.LENGTH_SHORT).show();
                     break;
@@ -108,8 +121,11 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(MainActivity.this, "加入失败", Toast.LENGTH_SHORT).show();
                     break;
                 case GROUP_ADD_SUCCEED:
+                    Group group = (Group) msg.obj;
                     ((GroupFragment) getSupportFragmentManager().findFragmentByTag(GROUP_FRAGMENT_TAG))
-                            .getContactsAdapter().addGroup((Group) msg.obj);
+                            .getContactsAdapter().addGroup(group);
+                    RongIM.getInstance().refreshGroupInfoCache(new io.rong.imlib.model.Group(group.getGroupId(),
+                            group.getName(), PortraitUri.getUriFromDrawableRes(MainActivity.this, R.drawable.group)));
                     Toast.makeText(MainActivity.this, "加入成功", Toast.LENGTH_SHORT).show();
                     break;
                 default:
@@ -127,11 +143,11 @@ public class MainActivity extends AppCompatActivity {
             mFriendFragment = getSupportFragmentManager().findFragmentByTag(FRIEND_FRAGMENT_TAG);
             mGroupFragment = getSupportFragmentManager().findFragmentByTag(GROUP_FRAGMENT_TAG);
             getSupportFragmentManager().beginTransaction()
-                    .show(mConversationListFragment)
+                    .hide(mConversationListFragment)
                     .hide(mFriendFragment)
                     .hide(mGroupFragment)
+                    .show(mNowFragment)
                     .commit();
-            mNowFragment = mConversationListFragment;
         } else {
             mConversationListFragment = getConversationListFragment();
             mFriendFragment = new FriendFragment();
@@ -145,6 +161,30 @@ public class MainActivity extends AppCompatActivity {
                     .commit();
             mNowFragment = mConversationListFragment;
         }
+        // 设置用户信息提供者
+        RongIM.setUserInfoProvider((s) -> {
+            List<Friend> friendList = Contacts.getInstance().getFriendList();
+            for (Friend friend : friendList) {
+                if (friend.getUserId().equals(s)) {
+                    return new UserInfo(s, friend.getName(), Uri.parse(friend.getPortraitUri()));
+                }
+            }
+            return null;
+        }, true);
+        // 设置群组信息提供者
+        RongIM.setGroupInfoProvider((s) -> {
+            List<Group> groupList = Contacts.getInstance().getGroupList();
+            for (Group group : groupList) {
+                if (group.getGroupId().equals(s)) {
+                    return new io.rong.imlib.model.Group(s, group.getName(),
+                            PortraitUri.getUriFromDrawableRes(this, R.drawable.group));
+                }
+            }
+            return null;
+        }, true);
+        // 刷新自己的信息
+        RongIM.getInstance().refreshUserInfoCache(new UserInfo(User.getInstance().getUserId(),
+                User.getInstance().getName(), Uri.parse(User.getInstance().getPortraitUri())));
         setListener();
     }
 
@@ -152,25 +192,26 @@ public class MainActivity extends AppCompatActivity {
         mBottomNavigationView.setOnNavigationItemSelectedListener(menuItem -> {
             switch (menuItem.getItemId()) {
                 case R.id.messages:
-                    switchFragment(mNowFragment, getSupportFragmentManager()
-                            .findFragmentByTag(CONVERSATION_LIST_FRAGMENT_TAG));
-                    mNowFragment = getSupportFragmentManager().findFragmentByTag(CONVERSATION_LIST_FRAGMENT_TAG);
+                    switchFragment(mNowFragment, getSupportFragmentManager().findFragmentByTag(CONVERSATION_LIST_FRAGMENT_TAG));
                     return true;
                 case R.id.friends:
-                    switchFragment(mNowFragment, getSupportFragmentManager()
-                            .findFragmentByTag(FRIEND_FRAGMENT_TAG));
-                    mNowFragment = getSupportFragmentManager().findFragmentByTag(FRIEND_FRAGMENT_TAG);
+                    switchFragment(mNowFragment, getSupportFragmentManager().findFragmentByTag(FRIEND_FRAGMENT_TAG));
                     return true;
                 case R.id.groups:
-                    switchFragment(mNowFragment, getSupportFragmentManager()
-                            .findFragmentByTag(GROUP_FRAGMENT_TAG));
-                    mNowFragment = getSupportFragmentManager().findFragmentByTag(GROUP_FRAGMENT_TAG);
+                    switchFragment(mNowFragment, getSupportFragmentManager().findFragmentByTag(GROUP_FRAGMENT_TAG));
                     return true;
                 default:
             }
             return false;
         });
+        // 监听好友相关的系统信息
         SystemMessageOperation.getSystemMessage(this, mHandler);
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        getSupportFragmentManager().putFragment(outState, mNowFragment.getTag(), mNowFragment);
     }
 
     @Override
@@ -183,9 +224,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void switchFragment(Fragment from, Fragment to) {
         if (mNowFragment != to) {
-            mNowFragment = to;
             getSupportFragmentManager().beginTransaction()
                     .hide(from).show(to).commit();
+            mNowFragment = to;
         }
     }
 

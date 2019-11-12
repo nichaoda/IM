@@ -14,4 +14,6 @@
     <string name="group_name">群名</string>
     <string name="join_group">加入群组</string>
     <string name="search_id">id</string>
+    <string name="about">关于</string>
+    <string name="logout">退出</string>
 </resources>

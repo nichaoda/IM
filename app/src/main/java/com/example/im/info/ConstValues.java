@@ -5,6 +5,11 @@ package com.example.im.info;
  */
 public class ConstValues {
     /**
+     * AppKey和Secret
+     */
+    public static final String App_Key = "pvxdm17jpop7r";
+    public static final String App_Secret = "LnwaRoo3Jr9vMx";
+    /**
      * 注册相关
      */
     public static final int HAS_REGISTERED = 0;

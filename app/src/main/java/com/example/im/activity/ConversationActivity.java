@@ -18,6 +18,7 @@ public class ConversationActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_conversation);
+        getSupportActionBar().setTitle(getIntent().getData().getQueryParameter("title"));
         String conversationType = getIntent().getData().getLastPathSegment().toLowerCase(Locale.US);
         String targetId = getIntent().getData().getQueryParameter("targetId");
         FragmentManager fragmentManage = getSupportFragmentManager();

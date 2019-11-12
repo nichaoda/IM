@@ -4,14 +4,20 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.im.R;
 import com.example.im.fragment.FriendFragment;
 import com.example.im.fragment.GroupFragment;
@@ -23,6 +29,7 @@ import com.example.im.util.ContactsOperation;
 import com.example.im.util.PortraitUri;
 import com.example.im.util.SystemMessageOperation;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationView;
 
 import java.util.List;
 
@@ -46,12 +53,14 @@ import static com.example.im.info.ConstValues.GROUP_CREATE_SUCCEED;
 import static com.example.im.info.ConstValues.GROUP_FRAGMENT_TAG;
 import static com.example.im.info.ConstValues.GROUP_HAS_CREATED;
 import static com.example.im.info.ConstValues.GROUP_NOT_EXIST;
+import static com.example.im.info.ConstValues.LOGIN_INFO;
 import static com.example.im.info.ConstValues.SEND_ADD_FRIEND_REQUEST_SUCCEED;
 import static com.example.im.info.ConstValues.USER_IN_THIS_GROUP;
 import static com.example.im.info.ConstValues.USER_NOT_IN_THE_TABLE;
 
 public class MainActivity extends AppCompatActivity {
     private BottomNavigationView mBottomNavigationView;
+    private NavigationView mNavigationView;
     private Fragment mConversationListFragment;
     private Fragment mFriendFragment;
     private Fragment mGroupFragment;
@@ -137,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mBottomNavigationView = findViewById(R.id.bottom_navigation_view);
+        initView();
         if (savedInstanceState != null) {
             mConversationListFragment = getSupportFragmentManager().findFragmentByTag(CONVERSATION_LIST_FRAGMENT_TAG);
             mFriendFragment = getSupportFragmentManager().findFragmentByTag(FRIEND_FRAGMENT_TAG);
@@ -188,6 +197,19 @@ public class MainActivity extends AppCompatActivity {
         setListener();
     }
 
+    private void initView() {
+        mBottomNavigationView = findViewById(R.id.bottom_navigation_view);
+        mNavigationView = findViewById(R.id.navigation);
+        View view = mNavigationView.getHeaderView(0);
+        Glide.with(this).load(User.getInstance().getPortraitUri())
+                .into((ImageView) view.findViewById(R.id.user_portrait_image));
+        TextView userId, userName;
+        userId = view.findViewById(R.id.user_id);
+        userName = view.findViewById(R.id.user_name);
+        userId.setText(userId.getText() + ": " + User.getInstance().getUserId());
+        userName.setText(userName.getText() + ": " + User.getInstance().getName());
+    }
+
     private void setListener() {
         mBottomNavigationView.setOnNavigationItemSelectedListener(menuItem -> {
             switch (menuItem.getItemId()) {
@@ -204,6 +226,27 @@ public class MainActivity extends AppCompatActivity {
             }
             return false;
         });
+        mNavigationView.setNavigationItemSelectedListener((menuItem) -> {
+                    switch (menuItem.getItemId()) {
+                        case R.id.about:
+                            Toast.makeText(this, "这是一个即时通讯App", Toast.LENGTH_SHORT).show();
+                            return true;
+                        case R.id.logout:
+                            // 登出
+                            RongIM.getInstance().logout();
+                            // 清空登录信息
+                            SharedPreferences.Editor editor = getSharedPreferences(LOGIN_INFO, MODE_PRIVATE).edit();
+                            editor.clear();
+                            editor.apply();
+                            // 跳转到登录界面
+                            startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                            finish();
+                            return true;
+                        default:
+                    }
+                    return false;
+                }
+        );
         // 监听好友相关的系统信息
         SystemMessageOperation.getSystemMessage(this, mHandler);
     }

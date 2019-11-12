@@ -9,6 +9,9 @@ import java.util.Random;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import static com.example.im.info.ConstValues.App_Key;
+import static com.example.im.info.ConstValues.App_Secret;
+
 public class HttpUtil {
     private static String getSHA1(String request) {
         StringBuffer buffer = null;
@@ -31,8 +34,6 @@ public class HttpUtil {
     }
 
     public static Map<String, String> getHeaders() {
-        String App_Key = "vnroth0kvbimo";
-        String App_Secret = "TlDOoNDdng2xqK";
         Random random = new Random();
         String Nonce = random.nextInt(10000) + "";
         String Timestamp = System.currentTimeMillis() + "";

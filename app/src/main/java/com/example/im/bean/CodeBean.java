@@ -1,6 +1,6 @@
 package com.example.im.bean;
 
-public class GroupOperationBean {
+public class CodeBean {
     private int code;
 
     public int getCode() {

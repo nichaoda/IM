@@ -7,9 +7,9 @@
     <string name="name">用户名称</string>
     <string name="check_password">确认密码</string>
     <string name="messages">消息</string>
-    <string name="contacts">联系人</string>
+    <string name="friends">好友</string>
     <string name="groups">群组</string>
-    <string name="add_friend">添加好友</string>
+    <string name="add_friend_request">发起添加好友请求</string>
     <string name="create_group">创建群组</string>
     <string name="group_name">群名</string>
     <string name="join_group">加入群组</string>

@@ -1,6 +1,6 @@
 package com.example.im.util;
 
-import com.example.im.bean.GroupOperationBean;
+import com.example.im.bean.CodeBean;
 import com.example.im.bean.UserTokenBean;
 
 import java.util.Map;
@@ -28,7 +28,7 @@ public interface GetResult {
      */
     @FormUrlEncoded
     @POST("group/create.json")
-    Call<GroupOperationBean> getGroupCreateResult(@HeaderMap Map<String, String> headers, @FieldMap Map<String, String> bodies);
+    Call<CodeBean> getGroupCreateResult(@HeaderMap Map<String, String> headers, @FieldMap Map<String, String> bodies);
 
     /**
      * @param headers 请求头
@@ -37,5 +37,14 @@ public interface GetResult {
      */
     @FormUrlEncoded
     @POST("group/join.json")
-    Call<GroupOperationBean> getGroupJoinResult(@HeaderMap Map<String, String> headers, @FieldMap Map<String, String> bodies);
+    Call<CodeBean> getGroupJoinResult(@HeaderMap Map<String, String> headers, @FieldMap Map<String, String> bodies);
+
+    /**
+     * @param headers 请求头
+     * @param bodies  请求体
+     * @return 发送系统消息结果
+     */
+    @FormUrlEncoded
+    @POST("message/system/publish.json")
+    Call<CodeBean> getSystemMessageSendResult(@HeaderMap Map<String, String> headers, @FieldMap Map<String, String> bodies);
 }

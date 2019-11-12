@@ -44,27 +44,27 @@ public class ConstValues {
      * 主界面
      */
     public static final String CONVERSATION_LIST_FRAGMENT_TAG = "messages";
-    public static final String CONTACTS_FRAGMENT_TAG = "contacts";
+    public static final String FRIEND_FRAGMENT_TAG = "friends";
     public static final String GROUP_FRAGMENT_TAG = "groups";
     /**
-     * 添加好友
+     * 好友相关
      */
     public static final int EDITTEXT_IS_EMPTY = 0;
     public static final int CAN_NOT_ADD_MYSELF = 1;
     public static final int USER_NOT_IN_THE_TABLE = 2;
     public static final int FRIEND_HAS_ADDED = 3;
-    public static final int ADD_SUCCEED = 4;
+    public static final int SEND_ADD_FRIEND_REQUEST_SUCCEED = 4;
+    public static final int FRIEND_ADD_SUCCEED = 5;
     /**
      * 群组相关
      */
-    public static final int CREATE_GROUP_INFO_NOT_COMPLETE = 0;
-    public static final int GROUP_HAS_CREATED = 1;
-    public static final int GROUP_CREATE_FAILED = 2;
-    public static final int GROUP_CREATE_SUCCEED = 3;
-    public static final int ADD_GROUP_INFO_IS_EMPTY = 4;
-    public static final int GROUP_NOT_EXIST = 5;
-    public static final int USER_IN_THIS_GROUP = 6;
-    public static final int GROUP_ADD_FAILED = 7;
-    public static final int GROUP_ADD_SUCCEED = 8;
-
+    public static final int CREATE_GROUP_INFO_NOT_COMPLETE = 6;
+    public static final int GROUP_HAS_CREATED = 7;
+    public static final int GROUP_CREATE_FAILED = 8;
+    public static final int GROUP_CREATE_SUCCEED = 9;
+    public static final int ADD_GROUP_INFO_IS_EMPTY = 10;
+    public static final int GROUP_NOT_EXIST = 11;
+    public static final int USER_IN_THIS_GROUP = 12;
+    public static final int GROUP_ADD_FAILED = 13;
+    public static final int GROUP_ADD_SUCCEED = 14;
 }

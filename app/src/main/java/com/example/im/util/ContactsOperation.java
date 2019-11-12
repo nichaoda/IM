@@ -12,11 +12,12 @@ import android.widget.EditText;
 import androidx.appcompat.app.AlertDialog;
 
 import com.example.im.R;
-import com.example.im.bean.GroupOperationBean;
-import com.example.im.info.Contacts;
+import com.example.im.bean.CodeBean;
+import com.example.im.bean.ContactNtfBean;
 import com.example.im.info.Friend;
 import com.example.im.info.Group;
 import com.example.im.info.User;
+import com.google.gson.Gson;
 
 import java.io.IOException;
 import java.sql.ResultSet;
@@ -30,7 +31,6 @@ import retrofit2.Call;
 import retrofit2.Response;
 
 import static com.example.im.info.ConstValues.ADD_GROUP_INFO_IS_EMPTY;
-import static com.example.im.info.ConstValues.ADD_SUCCEED;
 import static com.example.im.info.ConstValues.CAN_NOT_ADD_MYSELF;
 import static com.example.im.info.ConstValues.CREATE_GROUP_INFO_NOT_COMPLETE;
 import static com.example.im.info.ConstValues.EDITTEXT_IS_EMPTY;
@@ -41,6 +41,7 @@ import static com.example.im.info.ConstValues.GROUP_CREATE_FAILED;
 import static com.example.im.info.ConstValues.GROUP_CREATE_SUCCEED;
 import static com.example.im.info.ConstValues.GROUP_HAS_CREATED;
 import static com.example.im.info.ConstValues.GROUP_NOT_EXIST;
+import static com.example.im.info.ConstValues.SEND_ADD_FRIEND_REQUEST_SUCCEED;
 import static com.example.im.info.ConstValues.USER_IN_THIS_GROUP;
 import static com.example.im.info.ConstValues.USER_NOT_IN_THE_TABLE;
 
@@ -50,7 +51,7 @@ public class ContactsOperation {
         View dialogSearch = LayoutInflater.from(context).inflate(R.layout.dialog_search, null);
         Dialog alertDialog = new AlertDialog.Builder(context)
                 .setView(dialogSearch)
-                .setPositiveButton("添加好友", (dialog, which) -> {
+                .setPositiveButton("发起添加好友请求", (dialog, which) -> {
                     EditText editTextSearch = dialogSearch.findViewById(R.id.dialog_edittext_search);
                     String friendId = editTextSearch.getText().toString();
                     if (TextUtils.isEmpty(friendId)) {
@@ -71,16 +72,12 @@ public class ContactsOperation {
                             dbHelper.setData(new String[]{friendId});
                             ResultSet resultSet = dbHelper.executeQuery();
                             MySqlDBHelper dbHelper2 = null;
-                            MySqlDBHelper dbHelper3 = null;
                             try {
                                 // 不存在
                                 if (!resultSet.next()) {
                                     message.what = USER_NOT_IN_THE_TABLE;
                                     handler.sendMessage(message);
                                 } else {
-                                    // 获取好友信息
-                                    String name = resultSet.getString("name");
-                                    String portraitUri = resultSet.getString("portraitUri");
                                     // 是否已经是好友
                                     String sql2 = "select * from friend where userId = ? and friendId = ?";
                                     dbHelper2 = new MySqlDBHelper(sql2);
@@ -91,19 +88,9 @@ public class ContactsOperation {
                                         message.what = FRIEND_HAS_ADDED;
                                         handler.sendMessage(message);
                                     } else {
-                                        // 添加好友
-                                        String sql3 = "insert into friend(userId,friendId) values(?,?),(?,?)";
-                                        dbHelper3 = new MySqlDBHelper(sql3);
-                                        dbHelper3.setData(new String[]{userId, friendId, friendId, userId});
-                                        int result = dbHelper3.executeSQL();
-                                        if (result == 2) {
-                                            // 成功
-                                            message.what = ADD_SUCCEED;
-                                            message.obj = new Friend(friendId, name, portraitUri);
-                                            handler.sendMessage(message);
-                                            // 发起聊天
-//                                            RongIM.getInstance().startPrivateChat(context, friendId, name);
-                                        }
+                                        SystemMessageOperation.sendSystemMessage(userId, friendId, "Request",
+                                                User.getInstance().getName() + "请求加你为好友",
+                                                SEND_ADD_FRIEND_REQUEST_SUCCEED, handler);
                                     }
                                 }
                             } catch (SQLException e) {
@@ -112,9 +99,6 @@ public class ContactsOperation {
                                 dbHelper.closeConnection();
                                 if (dbHelper2 != null) {
                                     dbHelper2.closeConnection();
-                                }
-                                if (dbHelper3 != null) {
-                                    dbHelper3.closeConnection();
                                 }
                             }
                         }).start();
@@ -160,11 +144,11 @@ public class ContactsOperation {
                                 bodies.put("userId", User.getInstance().getUserId());
                                 bodies.put("groupId", groupId);
                                 bodies.put("groupName", groupName);
-                                Call<GroupOperationBean> call = HttpUtil.getInterfaceInstance()
+                                Call<CodeBean> call = HttpUtil.getInterfaceInstance()
                                         .getGroupCreateResult(HttpUtil.getHeaders(), bodies);
                                 try {
-                                    Response<GroupOperationBean> response = call.execute();
-                                    GroupOperationBean groupCreateBean = response.body();
+                                    Response<CodeBean> response = call.execute();
+                                    CodeBean groupCreateBean = response.body();
                                     if (groupCreateBean.getCode() == 200) {
                                         // 创建成功,插入到数据库两张表中
                                         String sql2 = "insert into chat_group(groupId,groupName,userId) values(?,?,?)";
@@ -190,9 +174,7 @@ public class ContactsOperation {
                                             for (; ; ) {
                                                 if (dbHelper4.executeSQL() == 1) {
                                                     // 从chat_group表删除对应内容成功
-                                                    message.what = GROUP_CREATE_FAILED;
-                                                    handler.sendMessage(message);
-                                                    return;
+                                                    break;
                                                 }
                                             }
                                         }
@@ -272,11 +254,11 @@ public class ContactsOperation {
                             bodies.put("userId", User.getInstance().getUserId());
                             bodies.put("groupId", groupId);
                             bodies.put("groupName", groupName);
-                            Call<GroupOperationBean> call = HttpUtil.getInterfaceInstance()
+                            Call<CodeBean> call = HttpUtil.getInterfaceInstance()
                                     .getGroupJoinResult(HttpUtil.getHeaders(), bodies);
                             try {
-                                Response<GroupOperationBean> response = call.execute();
-                                GroupOperationBean groupJoinBean = response.body();
+                                Response<CodeBean> response = call.execute();
+                                CodeBean groupJoinBean = response.body();
                                 if (groupJoinBean.getCode() == 200) {
                                     // 插入到group_member表中
                                     String sql3 = "insert into group_member(groupId,userId) values(?,?)";
